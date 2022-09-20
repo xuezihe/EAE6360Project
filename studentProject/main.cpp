@@ -104,10 +104,10 @@ int main()
 	}
 
 	//create VBO
-	unsigned int VBO;
+	GLuint VBO;
 	glGenBuffers(1, &VBO);
 	//bind VAO 
-	unsigned int VAO;
+	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	//bind VBO load to buffer
