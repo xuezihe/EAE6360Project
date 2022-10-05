@@ -1,4 +1,6 @@
-﻿#include <glad/glad.h>
+﻿#include "main.h"
+
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -31,6 +33,10 @@ const char* fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+
+    // initial global variables
+    posXValue = 0.0f;
+    posYValue = 0.0f;
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -99,25 +105,6 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float vertices[] = {
-        // 0
-        +0.0f, +0.0f,
-        +1.0f, +0.0f, +0.0f,
-        // 1
-        +1.0f, +1.0f,
-        +1.0f, +0.0f, +0.0f,
-        // 2
-        -1.0f, +1.0f,
-        +0.0f, +1.0f, +0.0f,
-        // 3
-        -1.0f, -1.0f,
-        +0.0f, +1.0f, +0.0f,
-        // 4
-        +1.0f, -1.0f,
-        +0.0f, +0.0f, +1.0f,
-    };
 
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
@@ -130,7 +117,7 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     //pos
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0,2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     //color
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (char*)(sizeof(float) * 2));
@@ -138,7 +125,6 @@ int main()
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     // glBindVertexArray(0);
-    GLushort indices[] = { 0,1,2, 0,3,4 };
 
     GLuint indexBufferID;
     glGenBuffers(1, &indexBufferID);
@@ -168,14 +154,20 @@ int main()
         // be sure to activate the shader before any calls to glUniform
         glUseProgram(shaderProgram);
 
-        // update shader uniform
-        double  timeValue = glfwGetTime();
+        // update shader uniform color
+        double timeValue = glfwGetTime();
         float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
+        // update shader uniform pos
+        
+        int vertexPosLocation = glGetUniformLocation(shaderProgram, "posOffset");
+        glUniform2f(vertexPosLocation, posXValue, posYValue);
+
         // render the triangle
-        glDrawArrays(GL_TRIANGLES,0,6);
+        // glDrawArrays(GL_TRIANGLES,0,10);
+        glDrawElements(GL_TRIANGLES, vertexNum, GL_UNSIGNED_SHORT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -199,8 +191,25 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {posYValue += 0.05f;}
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        posYValue -= 0.05f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        posXValue += 0.05f;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        posXValue -= 0.05f;
+    }
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
