@@ -1,9 +1,9 @@
-#version 330 core
+#version 400
 out vec4 FragColor;
 
 in vec2 TexCoord;
-uniform sampler2D ourTexture1;   //纹理采样器1
-uniform sampler2D ourTexture2;   //纹理采样器2
+uniform sampler2D ourTexture1;   
+uniform sampler2D ourTexture2;   
 
 void main()
 {
