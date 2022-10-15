@@ -156,6 +156,9 @@
     <None Include="shaders\test.fs" />
     <None Include="shaders\test.vs" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="codepath.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

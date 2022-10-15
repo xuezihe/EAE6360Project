@@ -1,0 +1,19 @@
+
+
+draw 3D scene 
+
+-> switch to 2d projection
+	switch to projection matrix
+	save matrix state //glpushmatrix()
+	reset //glloadidentity()
+	set 2d projection matrix //gluortho2D()
+	switch to modelview matrix 
+	save state //glpushmatrix()
+	reset //glloadIdentity()
+draw HUD 
+-> switch back to 3d projection 
+	switch to projection matrix
+	retrive matrix state //glPopmatrix()
+	switch to modelview matrix
+	retrive //glpopmatrix()
+swap the buffers
