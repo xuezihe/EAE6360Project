@@ -1,3 +1,4 @@
 ﻿  main.cpp
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(170,38): warning C4244: 'argument': conversion from 'const float' to 'GLsizei', possible loss of data
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\shader.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(7,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   studentProject.vcxproj -> C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\x64\Debug\studentProject.exe
