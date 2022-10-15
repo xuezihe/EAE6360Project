@@ -10,6 +10,7 @@
 // Declare function
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
+void drawHUD();
 //vertex array
 float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -275,7 +276,10 @@ int main()
 
 		// update VAO
 		glBindVertexArray(VAO);
-		//display into window
+
+		// draw 2d HUD
+		drawHUD();
+		//swap buffers
 		glfwSwapBuffers(window);
 		// input
 		glfwPollEvents();
@@ -298,4 +302,23 @@ void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+}
+
+void drawHUD()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0.0, 1.0, 1.0, 0.0, 1, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	// load HUD()
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
 }
