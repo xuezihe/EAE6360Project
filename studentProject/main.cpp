@@ -53,10 +53,18 @@ float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
+
 //顶点索引
 unsigned int indices[] = { // 注意索引从0开始! 
 	0, 1, 3, // 第一个三角形
 	1, 2, 3  // 第二个三角形
+};
+
+glm::vec3 cubePositions[] = {
+  glm::vec3(0.0f,  0.0f,  0.0f),
+  glm::vec3(2.0f,  5.0f, -15.0f),
+  glm::vec3(-1.5f, -2.2f, -2.5f),
+
 };
 int main()
 {
@@ -175,13 +183,29 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 		//渲染图形
-		glm::mat4 trans(1.0f);
-		trans = glm::translate(trans, glm::vec3(0.0f, -0.3f, 0.0f));
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 0.1f));
-
 		/*
 		 *
 		 */
+		for (int i = 0; i < 3; i++)
+		{
+			glm::mat4 model(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+			int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+			glm::mat4 view(1.0f);
+			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+			glm::mat4 projection(1.0f);
+			projection = glm::perspective(glm::radians(50.0f), 800 / 600.0f, 0.01f, 1000.0f);
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+			int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+			glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+			int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
+			glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+		/*
+		 *
+		 * for only one cube
 		glm::mat4 model(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		glm::mat4 view(1.0f);
@@ -194,9 +218,12 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		/*
 		 *
 		 */
+
+		glm::mat4 trans(1.0f);
+		trans = glm::translate(trans, glm::vec3(0.0f, -0.3f, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 0.1f));
 		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 		glBindVertexArray(VAO);
