@@ -40,11 +40,17 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\triangle.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\triangle.fs">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="shaders\test.fs">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
     <None Include="shaders\test.vs">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

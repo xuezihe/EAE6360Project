@@ -11,6 +11,9 @@ const float vertexNum = 12.0f;
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
+/*
+ *
+
 float vertices[] = {
     // 0
     +0.0f, +0.0f,
@@ -39,6 +42,7 @@ float vertices[] = {
     +0.0f, +0.5f, +0.5f,
 
 };
+ */
 
 // indices
 GLushort indices[] = { 0,1,2, 3,0,2, 4,5,6, 7,4,5 };

@@ -155,6 +155,8 @@
   <ItemGroup>
     <None Include="shaders\test.fs" />
     <None Include="shaders\test.vs" />
+    <None Include="shaders\triangle.fs" />
+    <None Include="shaders\triangle.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="codepath.txt" />

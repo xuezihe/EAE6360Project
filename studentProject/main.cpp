@@ -11,6 +11,11 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void drawHUD();
+void mytriangle();
+void pretriangle();
+
+// global variables
+bool Myswitch = 0;
 //vertex array
 float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -56,9 +61,17 @@ float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
+
+// triangle vertex array
+float triangleVertices[]=
+{
+   -0.1f, -0.1f, 0.0f,
+	1.0f, -0.1f, 0.0f,
+	0.0f,  0.1f, 0.0f
+};
 //vertex index
 unsigned int indices[] = { 
-	0, 1, 3, 
+	0, 1, 2, 
 	1, 2, 3  
 };
 
@@ -95,6 +108,7 @@ int main()
 	}
 	// resize window
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
 	// load shader
 	Shader MyShader("shaders/test.vs", "shaders/test.fs");
 	MyShader.use();
@@ -108,7 +122,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	stbi_set_flip_vertically_on_load(true); //设置垂直翻转
+	stbi_set_flip_vertically_on_load(true); //flip
 	// load 1st texture
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load("img/img_1.jpg", &width, &height, &nrChannels, 0);
@@ -157,7 +171,7 @@ int main()
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load the third texture" << std::endl;
 	}
 	stbi_image_free(data);
 
@@ -168,11 +182,11 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, texture2);
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, texture3);
+
 	// set uniform value
 	MyShader.setInt("ourTexture1", 0);
 	MyShader.setInt("ourTexture2", 1);
 	MyShader.setInt("ourTexture3", 2);
-	// MyShader.setInt("ourTexture3", 2);
 	// gen VBO buffer
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
@@ -213,6 +227,15 @@ int main()
 		// clear screen 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
+
+		// setup for 3d new 
+		//glMatrixMode(GL_PROJECTION);
+		//glLoadIdentity();
+		// gluPerspective(40.0, (GLdouble)800 / (GLdouble)600, 0.5, 20.0);
+		//glMatrixMode(GL_MODELVIEW);
+		//glLoadIdentity();
+		//glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+
 		// draw 
 		// draw several cubes
 		for (int i = 0; i < 3; i++)
@@ -273,13 +296,14 @@ int main()
 		// draw
 		// glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
+		// draw 2d HUD
+		drawHUD();
 		// update VAO
 		glBindVertexArray(VAO);
 
-		// draw 2d HUD
-		drawHUD();
+
 		//swap buffers
+		// glFlush();
 		glfwSwapBuffers(window);
 		// input
 		glfwPollEvents();
@@ -302,23 +326,68 @@ void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+	{
+		switch (Myswitch)
+		{
+		case 1:
+			Myswitch = 0;
+		case 0:
+			Myswitch = 1;
+		}
+		
+	}
 }
 
 void drawHUD()
 {
+	/*
+	 *
+	 */
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(0.0, 1.0, 1.0, 0.0, 1, 100);
-
+	glOrtho(0.0, 800, 600, 0.0, -1.0, 10.0);
 	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
 	glLoadIdentity();
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
-	// load HUD()
+	glBegin(GL_QUADS);
+	glColor3f(1.0f, 0.0f, 0.0);
+	glVertex2f(0.0, 0.0);
+	glVertex2f(10.0, 0.0);
+	glVertex2f(10.0, 10.0);
+	glVertex2f(0.0, 10.0);
+	glEnd();
+
+
+	if (Myswitch)
+	{
+		// load HUD()
+		// pre triangle
+		pretriangle();
+	}
+
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+
+
 
 }
+
+void mytriangle()
+{
+	
+}
+
+void pretriangle()
+{
+	// load triangle shader 
+	Shader TriangleShader("shaders/triangle.vs", "shaders/triangle.fs");
+	TriangleShader.use();
+
+}
+
