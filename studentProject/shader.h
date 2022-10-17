@@ -47,6 +47,7 @@ public:
 		// to string
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
+
 		// create compile vertex shader
 		unsigned int vertexShader;
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);

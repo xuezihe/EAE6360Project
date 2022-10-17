@@ -1,5 +1,6 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "gl/GL.h"
 #include <iostream>
 #include "stb_image.h"
 #include "shader.h"
@@ -12,12 +13,13 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void drawHUD();
 void mytriangle();
-void pretriangle();
+Shader pretriangle();
 
 // global variables
 bool Myswitch = 0;
-//vertex array
+//vertex array cubes
 float vertices[] = { // 36 vertex, xyz,uv
+
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
 	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -61,6 +63,12 @@ float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
+// several cubes location
+glm::vec3 cubePositions[] = {
+  glm::vec3(0.0f,  0.0f,  0.0f),
+  glm::vec3(2.0f,  5.0f, -15.0f),
+  glm::vec3(-1.5f, -2.2f, -2.5f),
+};
 
 // triangle vertex array
 float triangleVertices[]=
@@ -75,13 +83,7 @@ unsigned int indices[] = {
 	1, 2, 3  
 };
 
-// several cubes location
-glm::vec3 cubePositions[] = {
-  glm::vec3(0.0f,  0.0f,  0.0f),
-  glm::vec3(2.0f,  5.0f, -15.0f),
-  glm::vec3(-1.5f, -2.2f, -2.5f),
 
-};
 int main()
 {
 	//init glfw
@@ -111,7 +113,10 @@ int main()
 
 	// load shader
 	Shader MyShader("shaders/test.vs", "shaders/test.fs");
-	MyShader.use();
+	// MyShader.use();
+
+	//load second shader
+	Shader triangleShader = pretriangle();
 
 	// Create 1st Texture
 	unsigned int texture1;
@@ -166,7 +171,7 @@ int main()
 	if (data)
 	{
 		// specify a two-dimensional texture image and generate mipma
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -203,6 +208,9 @@ int main()
 	// bind VBO，send vertex data to buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+
 	//bind EBO
 	/*
 	 *	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -240,31 +248,35 @@ int main()
 		// draw several cubes
 		for (int i = 0; i < 3; i++)
 		{
-			// model matrix 
-			glm::mat4 model(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-			// view matrix (move camera)
-			glm::mat4 view(1.0f);
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-			// projection matrix 
-			glm::mat4 projection(1.0f);
-			projection = glm::perspective(glm::radians(50.0f), 800 / 600.0f, 0.01f, 1000.0f);
-			// get index for model
-			int modelLoc = glGetUniformLocation(MyShader.ID, "model");
-			// set model uniform to shader
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-			// get index for view
-			int viewLoc = glGetUniformLocation(MyShader.ID, "view");
-			// set view uniform to shader
-			glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-			// get index for projection 
-			int projectionLoc = glGetUniformLocation(MyShader.ID, "projection");
-			// set projection uniform to shader
-			glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-			// draw 
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			MyShader.use();
+				// model matrix 
+				glm::mat4 model(1.0f);
+				model = glm::translate(model, cubePositions[i]);
+				model = glm::rotate(model, (float)glfwGetTime()* glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+				// view matrix (move camera)
+				glm::mat4 view(1.0f);
+				view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+				// projection matrix 
+				glm::mat4 projection(1.0f);
+				projection = glm::perspective(glm::radians(50.0f), 800 / 600.0f, 0.01f, 1000.0f);
+				// get index for model
+				int modelLoc = glGetUniformLocation(MyShader.ID, "model");
+				// set model uniform to shader
+				glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+				// get index for view
+				int viewLoc = glGetUniformLocation(MyShader.ID, "view");
+				// set view uniform to shader
+				glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+				// get index for projection 
+				int projectionLoc = glGetUniformLocation(MyShader.ID, "projection");
+				// set projection uniform to shader
+				glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+				// draw 
+				glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+		triangleShader.use();
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 		/*
 		 *
 		 * for only one cube
@@ -295,11 +307,6 @@ int main()
 		 */
 		// draw
 		// glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		// draw 2d HUD
-		drawHUD();
-		// update VAO
-		glBindVertexArray(VAO);
 
 
 		//swap buffers
@@ -335,7 +342,6 @@ void processInput(GLFWwindow* window)
 		case 0:
 			Myswitch = 1;
 		}
-		
 	}
 }
 
@@ -378,16 +384,19 @@ void drawHUD()
 
 }
 
-void mytriangle()
-{
-	
-}
-
-void pretriangle()
+void mytriangle(Shader shader)
 {
 	// load triangle shader 
+	
+	shader.use();
+}
+
+Shader pretriangle()
+{
 	Shader TriangleShader("shaders/triangle.vs", "shaders/triangle.fs");
-	TriangleShader.use();
+
+	return TriangleShader;
+	
 
 }
 
