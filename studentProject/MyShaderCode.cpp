@@ -24,9 +24,9 @@ const char* fragmentShaderCode =
 ""
 "out vec4 daColor;"
 "in vec3 theColor;"
-"uniform vec4 ourColor;"
+"uniform vec4 myColor;"
 ""
 "void main()"
 "{"
-"	daColor = vec4(theColor, 1.0) + ourColor;"
+"	daColor = vec4(theColor, 1.0) + myColor;"
 "}";

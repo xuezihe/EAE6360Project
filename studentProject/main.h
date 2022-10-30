@@ -7,6 +7,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 float posXValue;
 float posYValue;
+float posXValue2;
+float posYValue2;
 const float vertexNum = 12.0f;
 
 // set up vertex data (and buffer(s)) and configure vertex attributes

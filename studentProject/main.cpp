@@ -16,20 +16,9 @@
     extern const char* vertexShaderCode;
     extern const char* fragmentShaderCode;
 
-    const char* vertexShaderSource = "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos, 1.0);\n"
-        "}\0";
 
-    const char* fragmentShaderSource = "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "uniform vec4 ourColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = ourColor;\n"
-        "}\n\0";
+
+
 
     int main()
     {
@@ -37,6 +26,8 @@
         // initial global variables
         posXValue = 0.0f;
         posYValue = 0.0f;
+        posXValue2 = 0.0f;
+        posYValue2 = 0.0f;
         // glfw: initialize and configure
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -125,11 +116,12 @@
         GLuint indexBufferID;
         glGenBuffers(1, &indexBufferID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices),
-            indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices),indices, GL_STATIC_DRAW);
 
 
-        // bind the VAO (it was already bound, but just to demonstrate): seeing as we only have a single VAO we can 
+        // bind the VAO (it was already bound, but just to 
+        // 
+        // demonstrate): seeing as we only have a single VAO we can 
         // just bind it beforehand before rendering the respective triangle; this is another approach.
         glBindVertexArray(VAO);
 
@@ -150,17 +142,23 @@
             // update shader uniform color
             double timeValue = glfwGetTime();
             float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
-            int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+            int vertexColorLocation = glGetUniformLocation(shaderProgram, "myColor");
             glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
             // update shader uniform pos
 
             int vertexPosLocation = glGetUniformLocation(shaderProgram, "posOffset");
-            glUniform2f(vertexPosLocation, posXValue, posYValue);
+            glUniform2f(vertexPosLocation, 0.5f+posXValue, posYValue);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+            glUniform2f(vertexPosLocation, posXValue2, 0.5f+posYValue2);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+
 
             // render the triangle
             // glDrawArrays(GL_TRIANGLES,0,10);
+            glUniform2f(vertexPosLocation, 0.0f, 0.0f);
             glDrawElements(GL_TRIANGLES, vertexNum, GL_UNSIGNED_SHORT, 0);
+
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             glfwSwapBuffers(window);
@@ -180,21 +178,37 @@
     // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
     void processInput(GLFWwindow* window)
     {
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
             posYValue += 0.05f;
         }
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
             posYValue -= 0.05f;
         }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
             posXValue += 0.05f;
         }
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
             posXValue -= 0.05f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            posYValue2 += 0.05f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            posYValue2 -= 0.05f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        {
+            posXValue2 += 0.05f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        {
+            posXValue2 -= 0.05f;
         }
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
