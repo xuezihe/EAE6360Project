@@ -61,10 +61,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\triangle.vs">
+    <None Include="shaders\lighting.vs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\triangle.fs">
+    <None Include="shaders\lighting.fs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shaders\test.fs">

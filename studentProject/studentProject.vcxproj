@@ -161,8 +161,8 @@
   <ItemGroup>
     <None Include="shaders\test.fs" />
     <None Include="shaders\test.vs" />
-    <None Include="shaders\triangle.fs" />
-    <None Include="shaders\triangle.vs" />
+    <None Include="shaders\lighting.fs" />
+    <None Include="shaders\lighting.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="codepath.txt" />

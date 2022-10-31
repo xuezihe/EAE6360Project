@@ -11,9 +11,6 @@
 #include "Primitives/ShapeGenerator.h"
 #include "main.h"
 
-// Declare function
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
 
 
 
@@ -27,12 +24,13 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	// load shader
 	Shader MyShader("shaders/test.vs", "shaders/test.fs");
+	Shader lightShader("shaders/lighting.vs", "shaders/lighting.fs");
 
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
+	unsigned int VBO, cubeVAO;
+	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(cubeVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -40,10 +38,16 @@ int main()
 	// position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
 	// texture coord attribute
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+	glBindVertexArray(lightVAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
 
 	// Create 1st Texture
@@ -127,27 +131,38 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
+		// be sure to activate shader when setting uniforms/drawing objects
+		MyShader.use();
+		MyShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+		MyShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+
+
 
 		glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-
-		//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		view = camera.getWorldToViewMatrix();
 		MyShader.setMat4("view", view);
 
-		// draw 
-		// render boxes
-		glBindVertexArray(VAO);
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			// calculate the model matrix for each object and pass it to shader before drawing
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f * i;
-			model = glm::rotate(model,(float)(glfwGetTime()+10)* glm::radians(angle),glm::vec3(1.0f, 0.3f, 0.5f));
-			MyShader.setMat4("model", model);
 
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		// draw 
+		glm::mat4 model = glm::mat4(1.0f);
+		MyShader.setMat4("model", model);
+		glBindVertexArray(cubeVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		lightShader.use();
+		lightShader.setMat4("projection", projection);
+		lightShader.setMat4("view", view);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+		lightShader.setMat4("model", model);
+
+		glBindVertexArray(lightVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
 
 		//swap buffers
 		// glFlush();
@@ -156,7 +171,7 @@ int main()
 		glfwPollEvents();
 	}
 	// free
-	glDeleteVertexArrays(1, &VAO);
+	glDeleteVertexArrays(1, &cubeVAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(MyShader.ID);
 	// glfw close
@@ -192,23 +207,19 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		camera.moveForward();
-		cameraPos += cameraSpeed * cameraFront;
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		camera.moveBackward();
-		cameraPos -= cameraSpeed * cameraFront;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
 		camera.strafeLeft();
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
 		camera.strafeRight();
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
 	{
