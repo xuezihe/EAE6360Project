@@ -1,6 +1,5 @@
 #pragma once
 #include <glad/glad.h>
-#include "MyCamera.h"
 #include <GLFW/glfw3.h>
 float screenWidth;
 float screenHeight;
@@ -9,7 +8,6 @@ void processInput(GLFWwindow* window);
 float posXValue;
 float posYValue;
 const float vertexNum = 12.0f;
-Camera camera;
 
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
