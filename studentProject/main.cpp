@@ -14,9 +14,6 @@
 // Declare function
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-void drawHUD();
-void mytriangle();
-Shader pretriangle();
 
 //vertex array cubes
 float vertices[] = { // 36 vertex, xyz,uv
@@ -64,24 +61,18 @@ float vertices[] = { // 36 vertex, xyz,uv
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-// several cubes location
+// world space positions of our cubes
 glm::vec3 cubePositions[] = {
-  glm::vec3(0.0f,  0.0f,  0.0f),
-  glm::vec3(2.0f,  5.0f, -15.0f),
-  glm::vec3(-1.5f, -2.2f, -2.5f),
-};
-
-// triangle vertex array
-float triangleVertices[]=
-{
-   -0.1f, -0.1f, 0.0f,
-	1.0f, -0.1f, 0.0f,
-	0.0f,  0.1f, 0.0f
-};
-//vertex index
-unsigned int indices[] = { 
-	0, 1, 2, 
-	1, 2, 3  
+	glm::vec3(0.0f,  0.0f,  0.0f),
+	glm::vec3(2.0f,  5.0f, -15.0f),
+	glm::vec3(-1.5f, -2.2f, -2.5f),
+	glm::vec3(-3.8f, -2.0f, -12.3f),
+	glm::vec3(2.4f, -0.4f, -3.5f),
+	glm::vec3(-1.7f,  3.0f, -7.5f),
+	glm::vec3(1.3f, -2.0f, -2.5f),
+	glm::vec3(1.5f,  2.0f, -2.5f),
+	glm::vec3(1.5f,  0.2f, -1.5f),
+	glm::vec3(-1.3f,  1.0f, -1.5f)
 };
 
 
@@ -89,12 +80,28 @@ int main()
 {
 	auto window = initwindow();
 
+	// configure global opengl state
+	glEnable(GL_DEPTH_TEST);
 	// load shader
 	Shader MyShader("shaders/test.vs", "shaders/test.fs");
-	// MyShader.use();
 
-	//load second shader
-	Shader triangleShader = pretriangle();
+	unsigned int VBO, VAO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
 
 	// Create 1st Texture
 	unsigned int texture1;
@@ -139,9 +146,10 @@ int main()
 	}
 	stbi_image_free(data);
 
-
-	//load shape
-	ShapeData shape = ShapeGenerator::makeCube();
+	// set uniform value
+	MyShader.use();
+	MyShader.setInt("Texture1", 0);
+	MyShader.setInt("Texture2", 1);
 
 	// bind texture to buffer
 	glActiveTexture(GL_TEXTURE0);
@@ -149,124 +157,54 @@ int main()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
-	// set uniform value
-	MyShader.setInt("ourTexture1", 0);
-	MyShader.setInt("ourTexture2", 1);
-	MyShader.setInt("ourTexture3", 2);
-	// gen VBO buffer
-	GLuint VBO;
-	glGenBuffers(1, &VBO);
-
-	// gen EBO index data
-	GLuint EBO;
-	glGenBuffers(1, &EBO);
-
-	//gen VAO attribute 
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	// bind VAO
-	glBindVertexArray(VAO);
-	// bind VBO，send vertex data to buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
 
-	//bind EBO
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	// pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
+	// -----------------------------------------------------------------------------------------------------------
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800/600.0f, 0.1f, 100.0f);
+	MyShader.setMat4("projection", projection);
 
-	// set vertex description
-	// 0 for xyz, 1 for uv totally 5
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 	// draw loop
 	while (!glfwWindowShouldClose(window))
 	{
+
+
 		// input 
 		processInput(window);
-
-		// Depth test
-		glEnable(GL_DEPTH_TEST);
+		mouseMoveInput(window);
 
 		// clear screen 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 
-		// setup for 3d new 
-		//glMatrixMode(GL_PROJECTION);
-		//glLoadIdentity();
-		// gluPerspective(40.0, (GLdouble)800 / (GLdouble)600, 0.5, 20.0);
-		//glMatrixMode(GL_MODELVIEW);
-		//glLoadIdentity();
-		//glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+		// bind textures on corresponding texture units
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
+
+		glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+
+		//view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		view = camera.getWorldToViewMatrix();
+		MyShader.setMat4("view", view);
 
 		// draw 
-		// draw several cubes
-		for (int i = 0; i < 3; i++)
+		// render boxes
+		glBindVertexArray(VAO);
+		for (unsigned int i = 0; i < 10; i++)
 		{
-				MyShader.use();
-				// model matrix 
-				glm::mat4 model(1.0f);
-				model = glm::translate(model, cubePositions[i]);
-				model = glm::rotate(model, (float)glfwGetTime()* glm::radians(60.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-				// view matrix (move camera)
-				glm::mat4 view(1.0f);
-				view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-				// projection matrix 
-				glm::mat4 projection(1.0f);
-				projection = glm::perspective(glm::radians(50.0f), 800 / 600.0f, 0.01f, 1000.0f);
-				// get index for model
-				int modelLoc = glGetUniformLocation(MyShader.ID, "model");
-				// set model uniform to shader
-				glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-				// get index for view
-				int viewLoc = glGetUniformLocation(MyShader.ID, "view");
-				// set view uniform to shader
-				glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-				// get index for projection 
-				int projectionLoc = glGetUniformLocation(MyShader.ID, "projection");
-				// set projection uniform to shader
-				glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-				// draw 
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+			// calculate the model matrix for each object and pass it to shader before drawing
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model,(float)(glfwGetTime()+10)* glm::radians(angle),glm::vec3(1.0f, 0.3f, 0.5f));
+			MyShader.setMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-
-
-		/*
-		 *
-		 * for only one cube
-		glm::mat4 model(1.0f);
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		glm::mat4 view(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		glm::mat4 projection(1.0f);
-		projection = glm::perspective(glm::radians(50.0f), 800 / 600.0f, 0.01f, 1000.0f);
-		int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		 *
-		 */
-
-		/*
-		 * for trans only
-		 * glm::mat4 trans(1.0f);
-		 * trans = glm::translate(trans, glm::vec3(0.0f, -0.3f, 0.0f));
-		 * trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 0.1f));
-		 * unsigned int transformLoc = glGetUniformLocation(MyShader.ID, "transform");
-		 * glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-		 * lDrawElements(GL_TRIANGLES,6, GL_UNSIGNED_INT, 0);
-		 *
-		 */
-		// draw
-		// glDrawArrays(GL_TRIANGLES, 0, 36);
-
 
 		//swap buffers
 		// glFlush();
@@ -288,13 +226,44 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 // input 
+void mouseMoveInput(GLFWwindow* window)
+{
+	double xpos, ypos;
+	glfwGetCursorPos(window, &xpos, &ypos);
+	camera.mouseUpdate(glm::vec2(xpos* mousespeed, ypos* mousespeed));
+}
 void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
+		camera.moveForward();
+		cameraPos += cameraSpeed * cameraFront;
 
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camera.moveBackward();
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camera.strafeLeft();
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camera.strafeRight();
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		camera.moveUp();
+	}
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
+	{
+		camera.moveDown();
 	}
 
 }
@@ -326,53 +295,5 @@ GLFWwindow* initwindow()
 	return window;
 }
 
-void drawHUD()
-{
-	/*
-	 *
-	 */
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0.0, 800, 600, 0.0, -1.0, 10.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-	glClear(GL_DEPTH_BUFFER_BIT);
 
-	glBegin(GL_QUADS);
-	glColor3f(1.0f, 0.0f, 0.0);
-	glVertex2f(0.0, 0.0);
-	glVertex2f(10.0, 0.0);
-	glVertex2f(10.0, 10.0);
-	glVertex2f(0.0, 10.0);
-	glEnd();
-
-
-
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-
-
-
-}
-
-void mytriangle(Shader shader)
-{
-	// load triangle shader 
-	
-	shader.use();
-}
-
-Shader pretriangle()
-{
-	Shader TriangleShader("shaders/triangle.vs", "shaders/triangle.fs");
-
-	return TriangleShader;
-	
-
-}
 

@@ -8,9 +8,21 @@ void processInput(GLFWwindow* window);
 float posXValue;
 float posYValue;
 const float vertexNum = 12.0f;
+const float mousespeed = 0.01f;
 GLFWwindow* initwindow();
+void mouseMoveInput(GLFWwindow* window);
 
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
+// load camera
+Camera camera;
+
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+float cameraSpeed = 0.5f;
 // set up vertex data (and buffer(s)) and configure vertex attributes
 // ------------------------------------------------------------------
 /*
