@@ -8,6 +8,7 @@ void processInput(GLFWwindow* window);
 float posXValue;
 float posYValue;
 const float vertexNum = 12.0f;
+GLFWwindow* initwindow();
 
 
 // set up vertex data (and buffer(s)) and configure vertex attributes
@@ -46,4 +47,4 @@ float vertices[] = {
  */
 
 // indices
-GLushort indices[] = { 0,1,2, 3,0,2, 4,5,6, 7,4,5 };
+// GLushort indices[] = { 0,1,2, 3,0,2, 4,5,6, 7,4,5 };

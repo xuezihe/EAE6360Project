@@ -7,6 +7,9 @@
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp""
 #include "gtc/type_ptr.hpp"
+#include "MyCamera.h"
+#include "Primitives/ShapeGenerator.h"
+#include "main.h"
 
 // Declare function
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -84,30 +87,7 @@ unsigned int indices[] = {
 
 int main()
 {
-	//init glfw
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//create glfw windows
-	GLFWwindow* window = glfwCreateWindow(800, 600, "01_Triangle", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	// bind context with window
-	glfwMakeContextCurrent(window);
-
-	// glad callback
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
-	// resize window
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	auto window = initwindow();
 
 	// load shader
 	Shader MyShader("shaders/test.vs", "shaders/test.fs");
@@ -160,42 +140,25 @@ int main()
 	stbi_image_free(data);
 
 
-	// Create 3rd Texture
-	unsigned int texture3;
-	glGenTextures(1, &texture3);
-	glBindTexture(GL_TEXTURE_2D, texture3);
-	// load 3rd texture
-	data = stbi_load("img/Doraemon_small.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		// specify a two-dimensional texture image and generate mipma
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load the third texture" << std::endl;
-	}
-	stbi_image_free(data);
+	//load shape
+	ShapeData shape = ShapeGenerator::makeCube();
 
 	// bind texture to buffer
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture1);	
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, texture3);
 
 	// set uniform value
 	MyShader.setInt("ourTexture1", 0);
 	MyShader.setInt("ourTexture2", 1);
 	MyShader.setInt("ourTexture3", 2);
 	// gen VBO buffer
-	unsigned int VBO;
+	GLuint VBO;
 	glGenBuffers(1, &VBO);
 
 	// gen EBO index data
-	unsigned int EBO;
+	GLuint EBO;
 	glGenBuffers(1, &EBO);
 
 	//gen VAO attribute 
@@ -210,10 +173,9 @@ int main()
 
 
 	//bind EBO
-	/*
-	 *	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	 */
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// set vertex description
 	// 0 for xyz, 1 for uv totally 5
@@ -246,11 +208,11 @@ int main()
 		// draw several cubes
 		for (int i = 0; i < 3; i++)
 		{
-			MyShader.use();
+				MyShader.use();
 				// model matrix 
 				glm::mat4 model(1.0f);
 				model = glm::translate(model, cubePositions[i]);
-				model = glm::rotate(model, (float)glfwGetTime()* glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+				model = glm::rotate(model, (float)glfwGetTime()* glm::radians(60.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 				// view matrix (move camera)
 				glm::mat4 view(1.0f);
 				view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -272,8 +234,7 @@ int main()
 				// draw 
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-		triangleShader.use();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 
 		/*
 		 *
@@ -336,6 +297,33 @@ void processInput(GLFWwindow* window)
 
 	}
 
+}
+
+GLFWwindow* initwindow()
+{
+	//init glfw
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//create glfw windows
+	GLFWwindow* window = glfwCreateWindow(800, 600, "01_Triangle", NULL, NULL);
+	if (window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+	}
+	// bind context with window
+	glfwMakeContextCurrent(window);
+
+	// glad callback
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+	}
+	// resize window
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	return window;
 }
 
 void drawHUD()
