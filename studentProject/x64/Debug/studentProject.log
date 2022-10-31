@@ -1,4 +1,5 @@
 ﻿  main.cpp
 C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(8,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(239,10): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(184,10): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   studentProject.vcxproj -> C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\x64\Debug\studentProject.exe
