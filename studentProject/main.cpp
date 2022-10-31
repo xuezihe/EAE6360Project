@@ -15,8 +15,6 @@ void drawHUD();
 void mytriangle();
 Shader pretriangle();
 
-// global variables
-bool Myswitch = 0;
 //vertex array cubes
 float vertices[] = { // 36 vertex, xyz,uv
 
@@ -333,16 +331,11 @@ void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		switch (Myswitch)
-		{
-		case 1:
-			Myswitch = 0;
-		case 0:
-			Myswitch = 1;
-		}
+
 	}
+
 }
 
 void drawHUD()
@@ -369,12 +362,7 @@ void drawHUD()
 	glEnd();
 
 
-	if (Myswitch)
-	{
-		// load HUD()
-		// pre triangle
-		pretriangle();
-	}
+
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Primitives">
+      <UniqueIdentifier>{945bf1ad-8910-465b-a083-fe9a11e0ff2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,6 +26,12 @@
     </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives\ShapeGenerator.cpp">
+      <Filter>Primitives</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +46,18 @@
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives\ShapeData.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives\Vertex.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives\ShapeGenerator.h">
+      <Filter>Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
