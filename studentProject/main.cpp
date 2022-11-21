@@ -84,8 +84,9 @@ int main()
 		lightingShader.setVec3("lightPos", lightPos);
 		lightingShader.setMat4("projection", projection);
 		lightingShader.setMat4("view", view);
+		lightingShader.setVec3("viewPos",camera.getviewPostion() );
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(10.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		lightingShader.setMat4("model", model);
 
 		glBindVertexArray(cubeVAO);
