@@ -5,10 +5,10 @@
 #include "stb_image.h"
 #include "shader.h"
 #include "glm.hpp"
-#include "gtc/matrix_transform.hpp""
+#include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
 #include "MyCamera.h"
-#include "Primitives/ShapeGenerator.h"
+// #include "Primitives/ShapeGenerator.h"
 #include "main.h"
 
 

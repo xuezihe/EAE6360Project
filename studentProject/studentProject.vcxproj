@@ -157,6 +157,7 @@
     <ClInclude Include="Primitives\Vertex.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TeapotData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\test.fs" />

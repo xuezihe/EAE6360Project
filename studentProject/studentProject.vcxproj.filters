@@ -59,6 +59,9 @@
     <ClInclude Include="Primitives\ShapeGenerator.h">
       <Filter>Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="TeapotData.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\lighting.vs">
