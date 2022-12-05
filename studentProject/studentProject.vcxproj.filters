@@ -21,16 +21,16 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Primitives\ShapeGenerator.cpp">
+      <Filter>Primitives</Filter>
     </ClCompile>
     <ClCompile Include="MyCamera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\ShapeGenerator.cpp">
+    <ClCompile Include="glad.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stb_image.cpp">
       <Filter>Primitives</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,9 +40,6 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
@@ -62,12 +59,18 @@
     <ClInclude Include="TeapotData.h">
       <Filter>Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="utility.h">
+      <Filter>Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\lighting.vs">
+    <None Include="shaders\lighted.vs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\lighting.fs">
+    <None Include="shaders\lighted.fs">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="shaders\test.fs">

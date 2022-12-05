@@ -158,12 +158,13 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="TeapotData.h" />
+    <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\test.fs" />
     <None Include="shaders\test.vs" />
-    <None Include="shaders\lighting.fs" />
-    <None Include="shaders\lighting.vs" />
+    <None Include="shaders\lighted.fs" />
+    <None Include="shaders\lighted.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="codepath.txt" />

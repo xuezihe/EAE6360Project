@@ -12,20 +12,27 @@ const uint NUM_VERTICES_PER_TRI = 3;
 const uint NUM_FLOATS_PER_VERTICE = 9;
 const uint VERTEX_BYTE_SIZE = NUM_FLOATS_PER_VERTICE * sizeof(float);
 GLuint theBufferID;
-GLuint cube1IndexByteOffset;
-GLuint cube2IndexByteOffset;
+
+GLuint cubeIndexByteOffset;
 GLuint arrowIndexByteOffset;
-GLuint triangleIndexByteOffset;
+GLuint planeIndexByteOffset;
+GLuint teapotIndexByteOffset;
+GLuint sphereIndexByteOffset;
+GLuint torusIndexByteOffset;
 
-GLuint cube1NumIndices;
-GLuint cube2NumIndices;
+GLuint cubeNumIndices;
 GLuint arrowNumIndices;
-GLuint triangleNumIndices;
+GLuint planeNumIndices;
+GLuint teapotNumIndices;
+GLuint sphereNumIndices;
+GLuint torusNumIndices;
 
-GLuint cube1VertexArrayObjectID;
-GLuint cube2VertexArrayObjectID;
+GLuint cubeVertexArrayObjectID;
 GLuint arrowVertexArrayObjectID;
-GLuint triangleVertexArrayObjectID;
+GLuint planeVertexArrayObjectID;
+GLuint teapotVertexArrayObjectID;
+GLuint sphereVertexArrayObjectID;
+GLuint torusVertexArrayObjectID;
 // declare functions
 GLFWwindow* initwindow();
 void mouseMoveInput(GLFWwindow* window);
@@ -39,4 +46,4 @@ Camera camera;
 
 
 // lighting
-glm::vec3 lightPos(0.0f, 3.0f, 0.0f);
+glm::vec3 lightPos(0.0f, 5.0f, 0.0f);
