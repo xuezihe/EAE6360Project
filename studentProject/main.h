@@ -47,3 +47,4 @@ Camera camera;
 
 // lighting
 glm::vec3 lightPos(0.0f, 5.0f, 0.0f);
+glm::vec3 lightColor(1.0f, 0.3f, 0.3f);

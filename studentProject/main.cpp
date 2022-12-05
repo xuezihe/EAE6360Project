@@ -212,7 +212,7 @@ int main()
 		glBindVertexArray(cubeVertexArrayObjectID);
 		lightedShader.use();
 		lightedShader.setVec3("objectColor", 0.8f, 0.8f, 0.8f);
-		lightedShader.setVec3("lightColor", 1.0f, 0.3f, 0.3f);
+		lightedShader.setVec3("lightColor", lightColor);
 		lightedShader.setVec3("lightPos", lightPos);
 		lightedShader.setMat4("projection", projection);
 		lightedShader.setMat4("view", view);
@@ -270,6 +270,7 @@ int main()
 		lightCubeShader.use();
 		lightCubeShader.setMat4("projection", projection);
 		lightCubeShader.setMat4("view", view);
+		lightCubeShader.setVec3("lightColor", lightColor);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.1f)); // a smaller arrow
@@ -313,12 +314,13 @@ void mouseMoveInput(GLFWwindow* window)
 /// <param name="window"></param>
 void processInput(GLFWwindow* window)
 {
+	// close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	// camera
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		camera.moveForward();
-
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
@@ -340,6 +342,7 @@ void processInput(GLFWwindow* window)
 	{
 		camera.moveDown();
 	}
+	// light position
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 	{
 		lightPos.y +=0.1;
@@ -363,6 +366,15 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
 	{
 		lightPos.z -= 0.1;
+	}
+	// light color
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+	{
+		lightColor.x += 0.1;
+	}
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+	{
+		lightColor.x -= 0.1;
 	}
 
 }
