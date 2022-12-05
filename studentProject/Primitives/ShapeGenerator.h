@@ -27,8 +27,17 @@ class ShapeGenerator
 	static glm::vec3 evaluate(int gridU, int gridV, float* B, glm::vec3 patch[][4]);
 	static glm::vec3 evaluateNormal(int gridU, int gridV,
 		float* B, float* dB, glm::vec3 patch[][4]);
+	static void moveLid(int grid, float* v, glm::mat4 lidTransform);
+
 public:
 	static ShapeData makeTriangle();
 	static ShapeData makeCube();
 	static ShapeData makeArrow();
+	static ShapeData makePlaneIndices(uint dimensions);
+	static ShapeData makePlaneUnseamedIndices(uint tesselation);
+	static ShapeData makePlane(uint dimensions = 10);
+	static ShapeData makeTeapot(uint tesselation = 10, const glm::mat4& lidTransform = glm::mat4());
+	static ShapeData makeSphere(uint tesselation = 20);
+	static ShapeData makeTorus(uint tesselation = 20);
+	static ShapeData generateNormals(const ShapeData& data);
 };
