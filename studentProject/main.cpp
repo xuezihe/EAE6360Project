@@ -252,6 +252,12 @@ int main()
 		lightedShader.setMat4("model", model);
 		glDrawElements(GL_TRIANGLES, sphereNumIndices, GL_UNSIGNED_SHORT, (void*)sphereIndexByteOffset);
 
+		glBindVertexArray(sphereVertexArrayObjectID);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(3.0f,5.0f,0.0f));
+		lightedShader.setMat4("model", model);
+		glDrawElements(GL_TRIANGLES, sphereNumIndices, GL_UNSIGNED_SHORT, (void*)sphereIndexByteOffset);
+
 		// draw plane 
 		glBindVertexArray(planeVertexArrayObjectID);
 		model = glm::mat4(1.0f);

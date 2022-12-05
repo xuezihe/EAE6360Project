@@ -20,38 +20,38 @@ C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studen
 C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(237,93): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
 C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(246,97): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
 C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(253,97): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(260,95): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(271,95): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(339,19): warning C4305: '+=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(259,97): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(266,95): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(277,95): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(345,19): warning C4305: '+=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(343,20): warning C4305: '-=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(349,20): warning C4305: '-=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(347,20): warning C4305: '+=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(353,20): warning C4305: '+=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(351,20): warning C4305: '-=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(357,20): warning C4305: '-=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(355,20): warning C4305: '+=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(361,20): warning C4305: '+=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(359,20): warning C4305: '-=': truncation from 'double' to 'T'
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(365,20): warning C4305: '-=': truncation from 'double' to 'T'
           with
           [
               T=float
           ]
-C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(368,10): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\studentProject\main.cpp(374,10): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
   studentProject.vcxproj -> C:\Users\xuezi\Documents\Github Project\ta3\studentProject\studentProject\x64\Debug\studentProject.exe
